@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  freopen("NAME.INP", "r", stdin);
+
+  if (int x = 0) {
+  }
+
+  for
+    freopen("NAME.OUT", "w", stdout);
+  return 0;
+}
