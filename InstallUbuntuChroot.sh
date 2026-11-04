@@ -1,5 +1,5 @@
 
-pkg install -y curl && su -c 'bash -s' <<'ROOT'
+pkg install -y curl && su -c '/data/data/com.termux/files/usr/bin/bash -s' <<'ROOT'
 set -e
 
 BASE=/data/local/chroot
