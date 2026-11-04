@@ -24,7 +24,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      -- Use PATH so this works with Termux packages (clangd), not only /usr/bin.
+      -- Dùng PATH để tương thích với clangd cài qua Termux.
       vim.lsp.config("clangd", {
         cmd = {
           "clangd",
@@ -34,13 +34,18 @@ return {
           "--header-insertion=iwyu",
         },
         filetypes = { "c", "cpp", "objc", "objcpp" },
-        root_markers = { "compile_commands.json", "compile_flags.txt", ".git" },
+        root_markers = {
+          "compile_commands.json",
+          "compile_flags.txt",
+          ".git",
+        },
       })
       vim.lsp.enable("clangd")
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local opts = { buffer = args.buf, silent = true }
+
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
           vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
@@ -51,11 +56,12 @@ return {
         end,
       })
 
-      -- Show diagnostics only when the cursor rests on a C/C++ diagnostic.
+      -- Hiện diagnostics khi con trỏ dừng trên dòng có lỗi.
       vim.api.nvim_create_autocmd("CursorHold", {
         callback = function()
           local bufnr = vim.api.nvim_get_current_buf()
           local ft = vim.bo[bufnr].filetype
+
           if ft ~= "c" and ft ~= "cpp" and ft ~= "objc" and ft ~= "objcpp" then
             return
           end

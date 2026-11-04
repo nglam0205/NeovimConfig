@@ -35,7 +35,7 @@ return {
             border = "rounded",
           },
         },
-        -- Keep the screen uncluttered, especially on a phone.
+        -- Tắt chữ preview để giao diện gọn hơn trên màn hình điện thoại.
         ghost_text = {
           enabled = false,
         },

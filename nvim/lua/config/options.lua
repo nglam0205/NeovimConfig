@@ -23,9 +23,10 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 vim.opt.mouse = "a"
--- Enable system clipboard only when Termux:API clipboard commands are installed.
+
+-- Chỉ dùng clipboard hệ thống khi đã cài Termux:API.
 if vim.fn.executable("termux-clipboard-get") == 1
-    and vim.fn.executable("termux-clipboard-set") == 1 then
+  and vim.fn.executable("termux-clipboard-set") == 1 then
   vim.opt.clipboard = "unnamedplus"
 end
 
