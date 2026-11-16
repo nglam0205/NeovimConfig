@@ -124,7 +124,7 @@ Implemented in `lua/plugins/editor.lua`:
   2. Select the previous completion item.
   3. Otherwise fall back to normal Shift-Tab behavior.
 
-The `cpp` snippet remains exactly as defined in `lua/snippets/cpp.lua`.
+The `cpp` snippet derives both `freopen` paths from the current file name. For `solution.cpp`, it expands to `solution.INP` and `solution.OUT`. If the buffer has no file name, it falls back to `NAME`.
 
 clangd uses:
 
@@ -306,6 +306,8 @@ If a legacy `/sdcard` mount is detected, reboot the device to clear it, then rer
 - Paired backspace works.
 - `<CR>` inside braces expands to multiple lines.
 - LuaSnip registers one `cpp` snippet.
+- The `cpp` snippet uses the current file name for `.INP` and `.OUT` paths.
+- Unnamed buffers fall back to `NAME.INP` and `NAME.OUT`.
 - Tab expands the `cpp` snippet interactively.
 - Tab accepts a visible clangd completion snippet.
 - Native C++20 compilation with `bits/stdc++.h`, `std::ranges`, and `std::span` works.

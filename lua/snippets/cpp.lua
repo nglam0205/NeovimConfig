@@ -2,7 +2,15 @@ local ls = require("luasnip")
 
 local s = ls.snippet
 local t = ls.text_node
-local i = ls.insert_node
+local f = ls.function_node
+
+local function filename(_, snip)
+  local name = snip.env.TM_FILENAME_BASE
+  if not name or name == "" then
+    return "NAME"
+  end
+  return name
+end
 
 return {
   s("cpp", {
@@ -15,14 +23,14 @@ return {
       "    freopen(\"",
     }),
 
-    i(1, "NAME"),
+    f(filename),
 
     t({
       ".INP\", \"r\", stdin);",
       "    freopen(\"",
     }),
 
-    i(2, "NAME"),
+    f(filename),
 
     t({
       ".OUT\", \"w\", stdout);",
