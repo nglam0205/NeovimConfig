@@ -28,34 +28,24 @@ return {
         preset = "super-tab",
         ["<Tab>"] = {
           function(cmp)
-            local ls = require("luasnip")
-            if ls.expandable() then
-              vim.schedule(function() ls.expand_or_jump() end)
-              return true
-            end
-            if ls.jumpable(1) then
-              vim.schedule(function() ls.jump(1) end)
-              return true
-            end
             if cmp.is_visible() then
-              return cmp.select_and_accept()
+              cmp.select_and_accept()
+              return true
             end
             return false
           end,
+          "snippet_forward",
           "fallback",
         },
         ["<S-Tab>"] = {
           function(cmp)
-            local ls = require("luasnip")
-            if ls.jumpable(-1) then
-              vim.schedule(function() ls.jump(-1) end)
-              return true
-            end
             if cmp.is_visible() then
-              return cmp.select_prev()
+              cmp.select_prev()
+              return true
             end
             return false
           end,
+          "snippet_backward",
           "fallback",
         },
         ["<C-e>"] = { "cancel", "fallback" },
@@ -76,10 +66,15 @@ return {
         menu = {
           border = "none",
           scrollbar = false,
+          min_width = 20,
+          max_height = 12,
+          scrolloff = 3,
           draw = {
             treesitter = {},
+            padding = { 2, 2 },
+            gap = 2,
             columns = {
-              { "kind_icon", "label", "label_description", gap = 1 },
+              { "kind_icon", "label", "label_description", gap = 2 },
               { "source_name" },
             },
           },

@@ -4,7 +4,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.g.have_nerd_font = true
 
--- UI: VS Code-like, borderless.
+-- UI: low-contrast, borderless.
 opt.termguicolors = true
 opt.winborder = "none" -- Neovim >= 0.11: no floating-window borders.
 opt.number = true

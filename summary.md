@@ -80,9 +80,17 @@ Managed by `lazy.nvim`:
 - `nvim-lualine/lualine.nvim`
 - `echasnovski/mini.icons`
 - `nvim-tree/nvim-tree.lua`
-- `Mofiqul/vscode.nvim`
+- `rebelot/kanagawa.nvim`
 
 `matchparen` and `matchit` are enabled. Do not upgrade Blink to v2 without also installing `saghen/blink.lib`.
+
+### Colorscheme
+
+- Kanagawa `wave`, non-transparent, with a warm dark background.
+- Comments and keywords are italic; statements and types are not bold.
+- `terminalColors` is enabled and undercurls are used for diagnostics.
+- Colorscheme is compiled. After changing its config, run `:KanagawaCompile`.
+- Completion menu uses extra horizontal padding/gap (`padding = { 2, 2 }`, `gap = 2`). Blink has no per-row vertical spacing option.
 
 ## Editor Behavior
 
@@ -116,13 +124,12 @@ Implemented in `lua/config/pairs.lua`:
 Implemented in `lua/plugins/editor.lua`:
 
 - `<Tab>`:
-  1. Expand LuaSnip snippet if possible.
-  2. Jump to the next snippet placeholder if possible.
-  3. Accept the visible completion item.
-  4. Otherwise fall back to normal Tab behavior.
+  1. Accept the visible completion item, selected or first.
+  2. Otherwise advance to the next snippet placeholder or expand a snippet via Blink's native `snippet_forward`.
+  3. Otherwise fall back to normal Tab behavior.
 - `<S-Tab>`:
-  1. Jump to the previous snippet placeholder.
-  2. Select the previous completion item.
+  1. Select the previous completion item when the completion menu is visible.
+  2. Otherwise move to the previous snippet placeholder via `snippet_backward`.
   3. Otherwise fall back to normal Shift-Tab behavior.
 
 The `cpp` snippet derives both `freopen` paths from the current file name. For `solution.cpp`, it expands to `solution.INP` and `solution.OUT`. If the buffer has no file name, it falls back to `NAME`.
@@ -337,8 +344,14 @@ If a legacy `/sdcard` mount is detected, reboot the device to clear it, then rer
 - LuaSnip registers one `cpp` snippet.
 - The `cpp` snippet uses the current file name for `.INP` and `.OUT` paths.
 - Unnamed buffers fall back to `NAME.INP` and `NAME.OUT`.
-- Tab expands the `cpp` snippet interactively.
+- Tab expands the `cpp` snippet interactively when no completion menu is visible.
 - Tab accepts a visible clangd completion snippet.
+- Tab accepts the selected completion even when the typed text also matches the `cpp` snippet trigger; no snippet expands and the cursor does not jump.
+- Tab accepts a member completion exactly once and preserves text before and after the insertion.
+- Tab handles a clangd LSP snippet completion and positions the cursor at its first placeholder.
+- Tab preserves a Vietnamese UTF-8 prefix and the text after the cursor.
+- Undo after completion restores the typed prefix as one logical action.
+- Tab with no completion menu or snippet falls back to normal indentation.
 - Inline diagnostics render via `virt_lines` below the source line.
 - Inline diagnostics disappear when the cursor leaves the diagnostic line.
 - Multiple diagnostics on one line render as separate inline entries.
@@ -370,7 +383,8 @@ If a legacy `/sdcard` mount is detected, reboot the device to clear it, then rer
 - Interactive Shift-Tab was not fully automated; direct mapping tests indicate the behavior is implemented.
 - Some auto-pair `<CR>` and quote tests were affected by headless/feedkeys artifacts. Direct mapping tests passed.
 - Termux `termux-clipboard-set` and `termux-clipboard-get` are not currently installed, so clipboard integration is conditional.
-- Neovim TUI cannot change terminal line spacing. Patched fonts are required for icons.
+- Neovim TUI cannot change terminal line spacing. Patched fonts are required for icons. `linespace` is GUI-only and `termux.properties` has no line-height option; use a terminal font with taller line metrics to add vertical space.
+- Blink completion menu rows cannot be vertically separated through normal config. The menu supports left/right padding and column gaps only; adding blank rows would require patching its renderer/window sizing.
 - During validation, Android `/sdcard` disconnected twice. The first incident was traced to bind-mount plus force-unmount. The second occurred after the installer even though it did not mount FUSE; the exact trigger was not confirmed. Both were recovered with:
 
 ```bash

@@ -1,21 +1,26 @@
 return {
-  -- VS Code-inspired colors, with italic syntax groups.
+  -- Low-contrast, eye-friendly colors with a warm dark background.
   {
-    "Mofiqul/vscode.nvim",
+    "rebelot/kanagawa.nvim",
     lazy = false,
     priority = 1000,
     opts = {
-      style = "dark",
+      compile = true,
+      undercurl = true,
+      commentStyle = { italic = true },
+      functionStyle = {},
+      keywordStyle = { italic = true },
+      statementStyle = {},
+      typeStyle = {},
       transparent = false,
-      italic_comments = true,
-      italic_keywords = true,
-      italic_functions = false,
-      italic_variables = false,
-      terminal_colors = true,
+      dimInactive = false,
+      terminalColors = true,
+      theme = "wave",
+      background = { dark = "wave", light = "lotus" },
     },
     config = function(_, opts)
-      require("vscode").setup(opts)
-      vim.cmd.colorscheme("vscode")
+      require("kanagawa").setup(opts)
+      vim.cmd.colorscheme("kanagawa")
     end,
   },
 
