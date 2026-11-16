@@ -62,14 +62,15 @@ opt.confirm = true
 opt.mouse = "a"
 opt.completeopt = { "menu", "menuone", "noinsert", "noselect" }
 
--- Diagnostics: compact, no floating border.
+-- Diagnostics: inline only, no floating windows.
 vim.diagnostic.config({
   virtual_text = false,
+  virtual_lines = false,
   signs = { text = { "\u{f057}", "\u{f071}", "\u{f05a}", "\u{f0eb}" } },
   underline = true,
   update_in_insert = false,
   severity_sort = true,
-  float = { border = "none", source = true },
+  float = false,
 })
 
 local has_clipboard_get = vim.fn.executable("termux-clipboard-get") == 1

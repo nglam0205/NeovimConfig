@@ -42,6 +42,7 @@ There is no F5/F6/F7 dependency. The editor is designed for terminal use on Andr
 ├── lua/
 │   ├── config/
 │   │   ├── cp.lua
+│   │   ├── inline_diagnostics.lua
 │   │   ├── keymaps.lua
 │   │   ├── lazy.lua
 │   │   ├── lsp.lua
@@ -134,6 +135,31 @@ fallbackFlags = { "-std=c++20" }
 
 and is launched with `--enable-config`.
 
+### Inline Diagnostics
+
+Implemented in `lua/config/inline_diagnostics.lua`.
+
+- Uses `virt_lines` extmarks below the cursor line.
+- Never uses floating or popup windows.
+- Never uses end-of-line virtual text as the primary display.
+- Shows the current line's diagnostics automatically, with no extra keypress.
+- Shows severity, full message, source, code, and related diagnostic notes.
+- Supports multiple diagnostics on the same line.
+- Wraps all text to the current window width, including long unbroken tokens.
+- Deduplicates identical diagnostics and related notes.
+- Clears immediately when the cursor moves to a line without diagnostics.
+- Refreshes on diagnostic changes, buffer switches, window changes, and resizes.
+- Keeps the existing signs and underlines.
+- Uses severity-specific highlight groups: `DiagnosticError`, `DiagnosticWarn`, `DiagnosticInfo`, and `DiagnosticHint`.
+
+Example layout:
+
+```text
+[E] Error: Use of undeclared identifier 'y'
+    clang · code undeclared_var_use
+    ↳ main.cpp:3:8 Candidate constructor not viable...
+```
+
 ## Key Mappings
 
 | Mapping | Mode | Action |
@@ -158,6 +184,9 @@ and is launched with `--enable-config`.
 | `<Space>r` | Normal | Build and run |
 | `<Space>i` | Normal | Open input file |
 | `<Space>o` | Normal | Open output file |
+| `<Space>d` | Normal | Next diagnostic |
+| `[d` | Normal | Previous diagnostic |
+| `]d` | Normal | Next diagnostic |
 
 ## C++ Build and Run
 
@@ -310,6 +339,13 @@ If a legacy `/sdcard` mount is detected, reboot the device to clear it, then rer
 - Unnamed buffers fall back to `NAME.INP` and `NAME.OUT`.
 - Tab expands the `cpp` snippet interactively.
 - Tab accepts a visible clangd completion snippet.
+- Inline diagnostics render via `virt_lines` below the source line.
+- Inline diagnostics disappear when the cursor leaves the diagnostic line.
+- Multiple diagnostics on one line render as separate inline entries.
+- Related clangd notes and codes render inline.
+- Long messages wrap within a 35-column window without overflow.
+- Inline diagnostics refresh after diagnostic updates and buffer switches.
+- No floating or popup windows are created for inline diagnostics.
 - Native C++20 compilation with `bits/stdc++.h`, `std::ranges`, and `std::span` works.
 - CP build produces a runnable executable.
 - A failed rebuild preserves the previous executable.
